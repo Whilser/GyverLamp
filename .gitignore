@@ -1,0 +1,11 @@
+lib/
+*.bin
+*.orig
+*.bak
+.pio
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+.travis.yml
+config.h
