@@ -33,11 +33,11 @@ void webserver() {
 
     http->begin();
     
-    Serial.printf("Запущен веб сервер по адресу: http://%s.local/\r\n", clientId.c_str());
+    Serial.printf("Launched web server at: http://%s.local/\r\n", clientId.c_str());
     
   } else {
     
-    Serial.println("Ошибка создания веб сервера. \r\n");
+    Serial.println("Error starting web server. \r\n");
   }
   
 }
@@ -75,11 +75,20 @@ void responseHtml(String out, String title = "AlexGyver Lamp", int code = 200) {
         html += "</div>";
         html += "<div data-role='footer' data-theme='b' style='position: fixed;width: 100%;bottom: 0;z-index: 1;'>";
             html += "<div data-role='navbar' data-iconpos='bottom'>";
+                 #ifdef ENG
+                html += "<ul>";
+                    html += "<li><a href='/' data-ajax='false' data-icon='gear'>Basic settings</a></li>"; // сдлеать активной class='ui-btn-active'
+                    html += "<li><a href='/alarm' data-ajax='false' data-icon='clock'>Alarm clock</a></li>";
+                    html += "<!--<li><a href='/timer' data-ajax='false' data-icon='power'>Schedule</a></li>-->";
+                html += "</ul>";
+                #else  
                 html += "<ul>";
                     html += "<li><a href='/' data-ajax='false' data-icon='gear'>Основные настройки</a></li>"; // сдлеать активной class='ui-btn-active'
                     html += "<li><a href='/alarm' data-ajax='false' data-icon='clock'>Будильник</a></li>";
                     html += "<!--<li><a href='/timer' data-ajax='false' data-icon='power'>Расписание</a></li>-->";
                 html += "</ul>";
+                #endif
+                
             html += "</div>"; // .navbar
         html += "</div>"; // .footer
       html += "</div>"; // .page
@@ -158,7 +167,7 @@ void responseHtml(String out, String title = "AlexGyver Lamp", int code = 200) {
 void routeNotFound() {
   String out;
   
-  out = "Путь не найден";
+  out = "Path not found";
   out += "<br />URI: ";
   out += http->uri();
   out += "<br />Method: ";
@@ -170,7 +179,7 @@ void routeNotFound() {
     out += " " + http->argName(i) + ": " + http->arg(i) + "<br />";
   }
   out += "</pre><hr /><a class='ui-link' data-ajax='false' href=\"/\">Перейти на главную</a>";
-  responseHtml(out, "Ошибка 404", 404);
+  responseHtml(out, "Error 404", 404);
 }
 
 /**
@@ -254,9 +263,7 @@ void routeSetConfig() {
   }
   
   if(http->hasArg("brightness")){
-    ONflag = true;    
     modes[currentMode].brightness = http->arg("brightness").toInt();
-    changePower();
     FastLED.setBrightness(modes[currentMode].brightness);
 
     sendCurrent();
@@ -304,7 +311,12 @@ void routeSetConfig() {
 }
 
 void routeAlarm(){
+  #ifdef ENG
+  String out, days[] = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+  #else
   String out, days[] = {"пн","вт","ср","чт","пт","сб","вс"};
+  #endif
+
   out = "<form>";
     for (byte i = 0; i < 7; i++) {
       out += "<div class='ui-field-contain'>";  
@@ -314,11 +326,19 @@ void routeAlarm(){
               out += "<option value='1'></option>";
           out += "</select>";
       out += "</div>";
+      #ifdef ENG
+      out += "<div class='ui-field-contain'><label for='time_" + String(i) + "'>Time</label><input name='time_" + String(i) + "' id='time_" + String(i) + "' type='time' value='00:00' /></div>";
+      #else
       out += "<div class='ui-field-contain'><label for='time_" + String(i) + "'>время</label><input name='time_" + String(i) + "' id='time_" + String(i) + "' type='time' value='00:00' /></div>";
+      #endif
     }
     
     out += "<div class='ui-field-contain'>";
+      #ifdef ENG
+      out += "<label for='dawnMode'>Dawn for:</label>";
+      #else
       out += "<label for='dawnMode'>Рассвета за:</label>";
+      #endif
       out += "<select name='dawnMode' id='dawnMode'>";
       for(byte i = 0; i <= sizeof(dawnOffsets) - 1; i++){
        out += "<option value='" + String(i) + "'>" + String(dawnOffsets[i]) + "</option>"; 
@@ -393,6 +413,71 @@ void routeGetAlarmConfig() {
 void routeHome(){
   
   String out;
+
+  #ifdef ENG
+  
+  out = "<form>";
+
+      out += "<div class='ui-field-contain'>";
+        out += "<label for='on'>Power:</label>";
+        out += "<select name='on' id='on' data-role='slider' data-mini='true'>";
+          out += "<option value='0'>Off</option>";
+          out += "<option value='1'>On</option>";
+        out += "</select>";
+      out += "</div>";
+      
+      out += "<div class='ui-field-contain'>";
+        out += "<label for='currentMode'>Mode:</label>";
+        out += "<select name='currentMode' id='currentMode' data-mini='true'>";
+          
+          out += "<option value='0'>Confetti</option>";
+          out += "<option value='1'>Fire</option>";
+          out += "<option value='2'>Rainbow vertical</option>";
+          out += "<option value='3'>Rainbow horizontal</option>";
+          out += "<option value='4'>Color change</option>";
+          out += "<option value='5'>3D Madness</option>";
+          out += "<option value='6'>3D clouds</option>";
+          out += "<option value='7'>3D lava</option>";
+          out += "<option value='8'>3D plasma</option>";
+          out += "<option value='9'>3D rainbow</option>";
+          out += "<option value='10'>3D peacock</option>";
+          out += "<option value='11'>3D zebra</option>";
+          out += "<option value='12'>3D forest</option>";
+          out += "<option value='13'>3D ocean</option>";
+          out += "<option value='14'>Color</option>";
+          out += "<option value='15'>Snowfall</option>";
+          out += "<option value='16'>Matrix</option>";
+          out += "<option value='17'>Fireflies</option>";
+          out += "<option value='18'>Aquarium</option>";
+          out += "<option value='19'>Starfall</option>";
+          out += "<option value='20'>Paintball</option>";
+          out += "<option value='21'>Spiral</option>";
+          out += "<option value='22'>Demo</option>";
+          
+        out += "</select>";
+      out += "</div>";
+      
+      out += "<div class='ui-field-contain'>";
+        out += "<label for='brightness'>Brightness:</label>";
+        out += "<input type='range' name='brightness' id='brightness' value='50' min='1' max='255' data-highlight='true'>";
+      out += "</div>";
+      
+      out += "<div class='ui-field-contain'>";
+        out += "<label for='speed'>Speed:</label>";
+        out += "<input type='range' name='speed' id='speed' value='50' min='0' max='255' data-highlight='true'>";
+      out += "</div>";
+      
+      out += "<div class='ui-field-contain'>";
+        out += "<label for='scale'>Scale:</label>";
+        out += "<input type='range' name='scale' id='scale' value='50' min='0' max='100' data-highlight='true'>";
+      out += "</div>";
+
+  out += "</form>";
+  out += "<script type='text/javascript'>$(()=>{syncConfig('/getconfig','/setconfig');});</script>";
+  out += "<br>";
+  out += getTimeStampString();
+
+  #else
   
   out = "<form>";
 
@@ -455,6 +540,8 @@ void routeHome(){
   out += "<script type='text/javascript'>$(()=>{syncConfig('/getconfig','/setconfig');});</script>";
   out += "<br>";
   out += getTimeStampString();
+
+  #endif
 
   responseHtml(out);
 }

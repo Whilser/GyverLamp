@@ -39,6 +39,7 @@
    -  Добавлено: Переработан эффект смена цвета.
    -  Добавлено: Новый эффект - Спираль!
    -  Добавлено: Возможность задавать цвет через http запросы
+   -  Added: English localization. To switch to English localization, uncomment the ENG directive
 
    -  Исправлено: ошибка синхронизации с Home Assistant при управлении лампой через приложение для смартфона
    -  Исправлено: "разгорание" лампы с нуля при изменении яркости из Home Assistant
@@ -50,6 +51,8 @@
 
 // Для WEMOS выбираем плату LOLIN(WEMOS) D1 R2 & mini
 // Для NodeMCU выбираем NodeMCU 1.0 (ESP-12E Module)
+
+//#define ENG // Uncomment it to switch to English localization
 
 // ============= НАСТРОЙКИ =============
 // -------- ВРЕМЯ -------

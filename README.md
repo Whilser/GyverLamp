@@ -324,6 +324,7 @@ input_number:
 Управление переключением эффекта лампы: http://login:password@ip-address:8000/setconfig?currentMode=1
 Установка скорости эффекта : http://login:password@ip-address:8000/setconfig?speed=10
 Установка масштабирования эффекта : http://login:password@ip-address:8000/setconfig?scale=10
+Установка цвета из RGB палитры: http://login:password@ip-address:8000/setconfig?on=1&currentMode=14&r=254&g=100&b=10
 Вместо 8000 нужно указать порт, который прокинут от лампы с порта 80 в интернет. 
 ```
 

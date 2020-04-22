@@ -105,6 +105,14 @@ String getTimeStampString() {
    uint8_t seconds = ti->tm_sec;
    String secondStr = seconds < 10 ? "0" + String(seconds) : String(seconds);
 
+   #ifdef ENG
+
+   return "Date: "+ dayStr + "-" + monthStr + "-" + yearStr + ". " + "Time: " +
+          hoursStr + ":" + minuteStr;
+   #else
+
    return "Дата: "+ dayStr + "-" + monthStr + "-" + yearStr + ". " + "Время: " +
           hoursStr + ":" + minuteStr;
+
+   #endif
 }
