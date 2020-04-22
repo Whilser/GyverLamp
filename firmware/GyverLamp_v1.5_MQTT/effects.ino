@@ -190,6 +190,35 @@ void colorRoutine() {
 
 }
 
+// -------------------------Warm white light --------------------------------
+void warmLightRoutine()
+{
+  if (loadingFlag)
+  {
+    loadingFlag = false;
+    FastLED.clear();
+    delay(1);
+
+    uint8_t centerY = max((uint8_t)round(HEIGHT / 2.0F) - 1, 0);
+    uint8_t bottomOffset = (uint8_t)(!(HEIGHT & 1) && (HEIGHT > 1));                      // если высота матрицы чётная, линий с максимальной яркостью две, а линии с минимальной яркостью снизу будут смещены на один ряд
+    for (int16_t y = centerY; y >= 0; y--)
+    {
+      CRGB color = CHSV(
+                     45U,                                                                              // определяем тон
+                     map(modes[currentMode].speed, 0U, 255U, 0U, 170U),                                // определяем насыщенность
+                     y == centerY                                                                      // определяем яркость
+                     ? 255U                                                                          // для центральной горизонтальной полосы (или двух) яркость всегда равна 255
+                     : (modes[currentMode].scale / 100.0F) > ((centerY + 1.0F) - (y + 1.0F)) / (centerY + 1.0F) ? 255U : 0U);  // для остальных горизонтальных полос яркость равна либо 255, либо 0 в зависимости от масштаба
+
+      for (uint8_t x = 0U; x < WIDTH; x++)
+      {
+        drawPixelXY(x, y, color);                                                         // при чётной высоте матрицы максимально яркими отрисуются 2 центральных горизонтальных полосы
+        drawPixelXY(x, max((uint8_t)(HEIGHT - 1U) - (y + 1U) + bottomOffset, 0U), color); // при нечётной - одна, но дважды
+      }
+    }
+  }
+}
+
 // ------------------------------ снегопад 2.0 --------------------------------
 void snowRoutine() {
   // сдвигаем всё вниз

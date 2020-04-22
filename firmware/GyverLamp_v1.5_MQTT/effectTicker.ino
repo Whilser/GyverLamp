@@ -50,6 +50,8 @@ void effectsTick() {
           break;
         case 21: spiroRoutine();
           break;
+        case 22: warmLightRoutine();
+          break;
       }
       FastLED.show();
     }
