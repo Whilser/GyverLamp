@@ -227,7 +227,7 @@ void routeSetConfig() {
     value = http->arg("currentMode");
     currentMode =  value.toInt();
 
-    if (currentMode == 24) {
+    if (currentMode == 25) {
 
       demo = true;
       currentMode = random(0, MODE_AMOUNT-1);      
@@ -454,8 +454,8 @@ void routeHome(){
           out += "<option value='21'>Spiral</option>";
           out += "<option value='22'>Warm light</option>";
           out += "<option value='23'>Pendulum</option>";
-          out += "<option value='24'>Demo</option>";
-          
+          out += "<option value='24'>Pattern wave</option>";
+          out += "<option value='25'>Demo</option>";
         out += "</select>";
       out += "</div>";
       
@@ -519,8 +519,8 @@ void routeHome(){
           out += "<option value='21'>Спираль</option>";
           out += "<option value='22'>теплый свет</option>";
           out += "<option value='23'>маятник</option>";
-          out += "<option value='24'>Демо</option>";
-          
+          out += "<option value='24'>волна образца</option>";
+          out += "<option value='25'>Демо</option>";
         out += "</select>";
       out += "</div>";
       

@@ -54,6 +54,8 @@ void effectsTick() {
           break;
         case 23: prismataRoutine();
           break;
+        case 24: patternWave();
+          break;
       }
       FastLED.show();
     }
